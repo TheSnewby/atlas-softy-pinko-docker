@@ -1,22 +1,26 @@
-FROM ubuntu:22.04
+FROM ubuntu:latest
 LABEL maintainer="Stephen Newby <stephen.j.newby@gmail.com>"
+WORKDIR /app
 
 ENV TZ=America/Chicago
-ENV SHELL /bin/bash
+ENV SHELL=/bin/bash
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install dependencies and tools
 RUN apt-get update && \
-    apt-get upgrade -y \
-    # apt-get install -y sudo curl git python3 python3-pip mysql-server pkg-config && \
-    # apt-get install -y libmysqlclient-dev libssl-dev libffi-dev && \
+    apt-get upgrade -y && \
+    apt-get install -y python3 python3-pip && \
     apt-get clean
+    # apt-get install -y sudo curl git python3 python3-pip mysql-server pkg-config && \
+    # apt-get install -y libmysqlclient-dev libssl-dev libffi-dev
 
 # Ensure MySQL can run as a service
 # RUN mkdir -p /var/run/mysqld && chown -R mysql:mysql /var/run/mysqld
 
-# # Install pip packages
-# RUN pip3 install mysqlclient flasgger flask flask-cors flask-restful flask-sqlalchemy requests
+COPY api.py /.src
+
+# Install pip packages
+RUN pip3 install mysqlclient flasgger flask flask-cors flask-restful flask-sqlalchemy requests
 
 # Expose the MySQL port
 # EXPOSE 5000
