@@ -18,6 +18,7 @@ RUN apt-get update && \
 RUN rm /usr/lib/python*/EXTERNALLY-MANAGED
 # RUN pip3 install --upgrade pip
 RUN pip3 install -v flask
+RUN pip3 install flask-cors
 COPY api.py /app
 
 # Install pip packages
